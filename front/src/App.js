@@ -6,13 +6,14 @@ const initialState = {
 };
 const Store = createContext(initialState);
 
-
+// Creación de formulario para el ingreso de datos
 const Form = () => {
   const formRef = useRef(null);
   const { dispatch, state: {todo} } = useContext(Store);
   const item = todo.item
   const [state, setState] = useState(item);
   
+  //control del evento ADD
   const onAdd=(event) =>{
     event.preventDefault();
 
@@ -22,6 +23,7 @@ const Form = () => {
       isCompleted: false
     };  
 
+    //Petición para dar de alta un nuevo objeto
     fetch(HOST_API+"/todo", {
       method: "POST",
       body: JSON.stringify(request),
@@ -37,6 +39,7 @@ const Form = () => {
       });
   }
   
+    //Petición para dar de actualizar un objeto existente
   const onEdit=(event) =>{
     event.preventDefault();
 
@@ -61,6 +64,7 @@ const Form = () => {
       });
     }
 
+    //Diseño del formulario para el ingreso de datos
   return <form ref={formRef}>
   <input
     type="text"
@@ -75,11 +79,11 @@ const Form = () => {
 }
 
 
-
+//Vista de listado
 const List = () => {
   const { dispatch, state: { todo } } = useContext(Store);
   const currenList = todo.list;
-
+//Petición que trae todos los objetos registrados y los muestra en la vista
   useEffect(() => {
     fetch(HOST_API + "/todos")
       .then(response => response.json())
@@ -88,6 +92,7 @@ const List = () => {
       });
   }, [dispatch]);
 
+  // Función para eliminar un objeto de la base
   const onDelete = (id) => {
     fetch(HOST_API + "/"+id+"/todo", {
       method: "DELETE"
@@ -96,6 +101,7 @@ const List = () => {
     })
   };
 
+  // Función que acciona la edición del objeto seleccionado
   const onEdit = (todo) => {
     dispatch({ type: "edit-item", item: todo })
   };
@@ -140,12 +146,13 @@ const List = () => {
               </tr>
             )
           }
-        }
+        }     
         </tbody>
       </table>
     </div> 
 }
 
+//Función que controla los diferentes estados y dependiendo del estado las acciones que debe realizar
 function reducer(state, action) {
   switch (action.type) {
     case "update-item":
@@ -175,6 +182,7 @@ function reducer(state, action) {
   }
 }
 
+//Contenedor que mostrará en pantalla diferentes componentes de React.as
 const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
