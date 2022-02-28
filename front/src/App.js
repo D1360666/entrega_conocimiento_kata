@@ -124,7 +124,10 @@ const List = () => {
         dispatch({ type: "update-item", item: todo });
       });
   };
-
+  const decorationDone={
+    textDecoration: 'line-through'
+  };
+  
   return <div>
       <table>
         <thead>
@@ -135,18 +138,16 @@ const List = () => {
           </tr>
         </thead>
         <tbody>
-          {state.list.map((todo) => {
-            return (
-              <tr key={todo.id}>
+          {currenList.map((todo) => {
+            return <tr key={todo.id} style={todo.completed ? decorationDone:{}}>
                 <td>{todo.id}</td>
                 <td>{todo.name}</td>
                 <td><input type="checkbox" defaultChecked={todo.completed} onChange={(event) => onChange(event, todo)}></input></td>
                 <td><button onClick={() => onDelete(todo.id)}>Eliminar</button></td>
                 <td><button onClick={() => onEdit(todo)}>Editar</button></td>
               </tr>
-            )
-          }
-        }     
+            
+          })} 
         </tbody>
       </table>
     </div> 
